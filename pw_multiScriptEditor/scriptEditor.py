@@ -2,13 +2,16 @@ import traceback
 import sys
 import webbrowser
 import os
+import platform
 try:
+    from Qt.QtCore import *
+    from Qt.QtGui import *
+    from Qt.QtWidgets import *
+
+except:
     from PySide.QtCore import *
     from PySide.QtGui import *
-except:
-    from PySide2.QtCore import *
-    from PySide2.QtGui import *
-    from PySide2.QtWidgets import *
+
 from widgets import scriptEditor_UIs as ui, tabWidget, outputWidget, about, shortcuts
 from widgets.pythonSyntax import design
 reload(tabWidget)
@@ -51,11 +54,11 @@ class scriptEditorClass(QMainWindow, ui.Ui_scriptEditor):
         self.namespace = __import__('__main__').__dict__
         self.dial = None
 
-        self.updateNamespace({'self_main':self,
-                              'self_version':self.ver,
+        self.updateNamespace({'self_main': self,
+                              'self_version': self.ver,
                               'self_output': self.out,
                               'self_help': self.mse_help,
-                              'self_context':managers.context})
+                              'self_context': managers.context})
         self.session = sessionManager.sessionManagerClass()
         self.execAll_act.setIcon(QIcon(icons['all']))
         self.execSel_act.setIcon(QIcon(icons['sel']))
@@ -234,8 +237,8 @@ class scriptEditorClass(QMainWindow, ui.Ui_scriptEditor):
                 size = self.tab.widget(item).edit.fs
             else:
                 size = self.tab.widget(item).edit.font().pointSize()
-            tab = {'name':name,
-                   'text':text,
+            tab = {'name': name,
+                   'text': text,
                    'active': item == index,
                    'size': size}
             tabs.append(tab)
@@ -409,11 +412,12 @@ class scriptEditorClass(QMainWindow, ui.Ui_scriptEditor):
         w.activateWindow()
 
     def openFolder(self, path):
-        if os.name == 'nt':
+        current_platform = platform.system()
+        if current_platform == 'Windows':
             os.startfile(path)
-        elif os.name == 'posix':
+        elif current_platform == 'Linux':
             os.system('xdg-open "%s"' % path)
-        elif os.name =='os2':
+        elif current_platform =='Darwin':
             os.system('open "%s"' % path)
 
 try:

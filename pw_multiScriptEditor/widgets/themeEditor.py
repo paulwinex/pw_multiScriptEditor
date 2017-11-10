@@ -1,12 +1,12 @@
 try:
+    from Qt.QtCore import *
+    from Qt.QtGui import *
+    from Qt.QtWidgets import *
+
+except:
     from PySide.QtCore import *
     from PySide.QtGui import *
-    qt = 1
-except:
-    from PySide2.QtCore import *
-    from PySide2.QtGui import *
-    from PySide2.QtWidgets import *
-    qt = 2
+
 import themeEditor_UIs as ui
 import settingsManager
 import os
@@ -23,7 +23,7 @@ class themeEditorClass(QDialog, ui.Ui_themeEditor):
         self.preview_twd = inputWidget.inputClass(self, desk)
         self.preview_ly.addWidget(self.preview_twd)
         self.preview_twd.setPlainText(defaultText)
-        self.splitter.setSizes([200,300])
+        self.splitter.setSizes([200, 300])
         self.s = settingsManager.scriptEditorClass()
         self.colors_lwd.itemDoubleClicked.connect(self.getNewColor)
         self.save_btn.clicked.connect(self.saveTheme)
@@ -210,5 +210,3 @@ if __name__ == '__main__':
     if os.path.exists(qss):
         w.setStyleSheet(open(qss).read())
     app.exec_()
-
-

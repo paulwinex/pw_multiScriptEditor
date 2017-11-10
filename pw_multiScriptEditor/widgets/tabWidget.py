@@ -1,20 +1,20 @@
 try:
+    from Qt.QtCore import *
+    from Qt.QtGui import *
+    from Qt.QtWidgets import *
+
+except:
     from PySide.QtCore import *
     from PySide.QtGui import *
-    qt = 1
-except:
-    from PySide2.QtCore import *
-    from PySide2.QtGui import *
-    from PySide2.QtWidgets import *
-    qt = 2
+
 import os
 import numBarWidget, inputWidget
 reload(inputWidget)
 reload(numBarWidget)
 from managers import context
 
-
-style = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'style', 'completer.qss')
+style = os.path.join(
+    os.path.dirname(os.path.dirname(__file__)), 'style', 'completer.qss')
 if not os.path.exists(style):
     style=None
 
@@ -48,9 +48,9 @@ class tabWidgetClass(QTabWidget):
             if self.getCurrentText(i).strip():
                 # if qt == 1:
                 if self.yes_no_question('Close this tab without saving?\n'+self.tabText(i)):
-                # if QMessageBox.question(self, 'Close Tab',
-                #                        'Close this tab without saving?\n'+self.tabText(i),
-                #                         self.buttons) == QMessageBox.Yes:
+                    # if QMessageBox.question(self, 'Close Tab',
+                    #                        'Close this tab without saving?\n'+self.tabText(i),
+                    #                         self.buttons) == QMessageBox.Yes:
                     self.removeTab(i)
                 # else:
                 #     if QMessageBox.question(self, 'Close Tab',
@@ -176,12 +176,12 @@ class container(QWidget):
         if text:
             self.edit.addText(text)
         # if not context == 'hou':
-            # line number
+        # line number
         # if context == 'hou':
         #     import hou
         #     if hou.applicationVersion()[0] > 14:
         hbox.addWidget(self.edit)
-                # return
+        # return
         self.lineNum = numBarWidget.lineNumberBarClass(self.edit, self)
         self.edit.verticalScrollBar().valueChanged.connect(lambda :self.lineNum.update())
         self.edit.inputSignal.connect(lambda :self.lineNum.update())
