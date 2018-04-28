@@ -6,9 +6,9 @@ exec 'import nuke' in ns
 exec 'import nukescripts' in ns
 nuke = ns['nuke']
 import nukescripts
-from managers.nuke import nodes
+from ..managers.nuke import nodes
 nuke_nodes = dir(nodes)
-from managers.completeWidget import contextCompleterClass
+from ..managers.completeWidget import contextCompleterClass
 
 from Qt import QtCore, QtWidgets
 

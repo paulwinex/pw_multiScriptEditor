@@ -3,6 +3,7 @@ import os, sys, re
 from Qt import QtCore, QtWidgets
 
 from pw_multiScriptEditor import scriptEditor
+
 reload(scriptEditor)
 import MaxPlus
 q3dsmax = QtWidgets.QApplication.instance()

@@ -4,12 +4,12 @@ try:
 except:
     qt = 2
 import themeEditor_UIs as ui
-import settingsManager
+from .. import settingsManager
 import os
 from .pythonSyntax import design
 from .pythonSyntax import syntaxHighLighter
 from . import inputWidget
-import icons_rcs
+from .. import icons_rcs
 
 
 class themeEditorClass(QtWidgets.QDialog, ui.Ui_themeEditor):

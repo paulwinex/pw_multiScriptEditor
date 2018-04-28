@@ -6,8 +6,8 @@ from pythonSyntax import syntaxHighLighter
 reload(syntaxHighLighter)
 import completeWidget
 reload(completeWidget)
-import settingsManager
-import managers
+from .. import settingsManager
+from .. import managers
 reload(managers)
 from pythonSyntax import design
 # import inspect

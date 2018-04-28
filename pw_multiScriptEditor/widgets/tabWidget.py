@@ -7,7 +7,7 @@ import os
 import numBarWidget, inputWidget
 reload(inputWidget)
 reload(numBarWidget)
-from managers import context
+#from managers import context
 
 
 style = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'style', 'completer.qss')

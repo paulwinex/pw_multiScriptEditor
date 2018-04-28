@@ -2,7 +2,7 @@ from Qt import QtCore, QtGui, QtWidgets
 
 import os, re
 from . pythonSyntax import design
-import managers
+from .. import managers
 style = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'style', 'completer.qss')
 if not os.path.exists(style):
     style=None

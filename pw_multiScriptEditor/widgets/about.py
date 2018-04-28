@@ -1,6 +1,6 @@
 from Qt import QtCore, QtGui, QtWidgets
 
-import icons
+from .. import icons
 import about_UIs
 import os
 

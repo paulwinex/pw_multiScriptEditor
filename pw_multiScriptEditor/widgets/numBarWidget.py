@@ -1,5 +1,5 @@
 from Qt import QtCore, QtGui, QtWidgets
-import managers
+from .. import managers
 
 class lineNumberBarClass(QtWidgets.QWidget):
     def __init__(self, edit, parent=None):

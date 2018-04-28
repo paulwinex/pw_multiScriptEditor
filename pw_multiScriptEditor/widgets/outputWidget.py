@@ -2,7 +2,7 @@
 from Qt import QtCore, QtGui, QtWidgets
 
 
-from managers import context
+from .. import managers
 
 class outputClass(QtWidgets.QTextBrowser):
     def __init__(self):
@@ -40,7 +40,7 @@ class outputClass(QtWidgets.QTextBrowser):
         QtWidgets.QTextBrowser.wheelEvent(self, event)
 
     def changeFontSize(self, up):
-        if context == 'hou':
+        if managers.context == 'hou':
             if up:
                 self.fs = min(30, self.fs+1)
             else:
