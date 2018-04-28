@@ -1,29 +1,25 @@
-try:
-    from PySide.QtCore import *
-    from PySide.QtGui import *
-except:
-    from PySide2.QtCore import *
-    from PySide2.QtGui import *
-    from PySide2.QtWidgets import *
+
+from Qt import QtCore, QtGui, QtWidgets
+
 
 from managers import context
 
-class outputClass(QTextBrowser):
+class outputClass(QtWidgets.QTextBrowser):
     def __init__(self):
         super(outputClass, self).__init__()
-        self.setWordWrapMode(QTextOption.NoWrap)
+        self.setWordWrapMode(QtGui.QTextOption.NoWrap)
         self.fs = 14
-        self.document().setDefaultFont(QFont("monospace", self.fs, QFont.Normal))
-        metrics = QFontMetrics(self.document().defaultFont())
+        self.document().setDefaultFont(QtGui.QFont("monospace", self.fs, QtGui.QFont.Normal))
+        metrics = QtGui.QFontMetrics(self.document().defaultFont())
         self.setTabStopWidth(4 * metrics.width(' '))
         self.setMouseTracking(1)
 
     def showMessage(self, msg):
-        self.moveCursor(QTextCursor.End)
+        self.moveCursor(QtGui.QTextCursor.End)
         cursor = self.textCursor()
         cursor.insertText(str(msg)+'\n')
         self.setTextCursor(cursor)
-        self.moveCursor(QTextCursor.End)
+        self.moveCursor(QtGui.QTextCursor.End)
         self.ensureCursorVisible()
 
     def setTextEditFontSize(self, size):
@@ -35,13 +31,13 @@ class outputClass(QTextBrowser):
 
 
     def wheelEvent(self, event):
-        if event.modifiers() == Qt.ControlModifier:
+        if event.modifiers() == QtCore.Qt.ControlModifier:
             if event.delta() > 0:
                 self.changeFontSize(True)
             else:
                 self.changeFontSize(False)
         # super(outputClass, self).wheelEvent(event)
-        QTextBrowser.wheelEvent(self, event)
+        QtWidgets.QTextBrowser.wheelEvent(self, event)
 
     def changeFontSize(self, up):
         if context == 'hou':

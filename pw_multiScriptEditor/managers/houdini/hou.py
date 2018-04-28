@@ -1,4 +1,4 @@
-from PySide2.QtWidgets import *
+from Qt import QtWidgets
 
 class appearanceChangeType:
 
@@ -7074,7 +7074,7 @@ class PythonPanel(PaneTab):
     
     def activeInterfaceRootWidget(self):
 
-        return QWidget
+        return QtWidgets.QWidget
     
     def setActiveInterface(self, interface):
 
@@ -9878,19 +9878,19 @@ class qt():
 
     def createDialog(self):
 
-        return QWidget
+        return QtWidgets.QWidget
     
     def createMenu(self):
 
-        return QMenu
+        return QtWidgets.QMenu
     
     def createToolTip(self):
 
-        return QWidget
+        return QtWidgets.QWidget
     
     def createWindow(self):
 
-        return QWidget
+        return QtWidgets.QWidget
     
 
 class session():

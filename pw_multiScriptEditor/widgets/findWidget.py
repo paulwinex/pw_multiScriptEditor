@@ -1,20 +1,14 @@
-try:
-    from PySide.QtCore import *
-    from PySide.QtGui import *
-except:
-    from PySide2.QtCore import *
-    from PySide2.QtGui import *
-    from PySide2.QtWidgets import *
+from Qt import QtCore, QtWidgets
 import findWidget_UIs as ui
 
-class findWidgetClass(QWidget, ui.Ui_findReplace):
-    searchSignal = Signal(str)
-    replaceSignal = Signal(list)
-    replaceAllSignal = Signal(list)
+class findWidgetClass(QtWidgets.QWidget, ui.Ui_findReplace):
+    searchSignal = QtCore.Signal(str)
+    replaceSignal = QtCore.Signal(list)
+    replaceAllSignal = QtCore.Signal(list)
     def __init__(self, parent):
         super(findWidgetClass, self).__init__(parent)
         self.setupUi(self)
-        self.setWindowFlags(Qt.Tool)
+        self.setWindowFlags(QtCore.Qt.Tool)
         center = parent.parent().mapToGlobal(parent.geometry().center())
         myGeo = self.geometry()
         myGeo.moveCenter(center)
@@ -29,21 +23,21 @@ class findWidgetClass(QWidget, ui.Ui_findReplace):
 
     def search(self):
         self.searchSignal.emit(self.find_le.text())
-        QTimer.singleShot(10, self.find_le.setFocus)
+        QtCore.QTimer.singleShot(10, self.find_le.setFocus)
 
     def replace(self):
         find = self.find_le.text()
         rep = self.replace_le.text()
         self.replaceSignal.emit([find, rep])
-        QTimer.singleShot(10, self.replace_le.setFocus)
+        QtCore.QTimer.singleShot(10, self.replace_le.setFocus)
 
     def replaceAll(self):
         find = self.find_le.text()
         rep = self.replace_le.text()
         self.replaceAllSignal.emit([find, rep])
-        QTimer.singleShot(10, self.replace_le.setFocus)
+        QtCore.QTimer.singleShot(10, self.replace_le.setFocus)
 
     def keyPressEvent(self, event):
-        if event.key() == Qt.Key_Escape:
+        if event.key() == QtCore.Qt.Key_Escape:
             self.close()
         super(findWidgetClass, self).keyPressEvent(event)
