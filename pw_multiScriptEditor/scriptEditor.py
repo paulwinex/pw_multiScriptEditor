@@ -133,7 +133,6 @@ class scriptEditorClass(QtWidgets.QMainWindow, ui.Ui_scriptEditor):
         #start
         self.loadSession()
         self.loadSettings()
-        self.setWindowStyle()
         # self.out.showMessage('Multi Script Editor v.%s Loaded\npaulwinex.com' % self.ver)
         self.tab.widget(0).edit.setFocus()
         self.appContextMenu()
@@ -172,14 +171,15 @@ class scriptEditorClass(QtWidgets.QMainWindow, ui.Ui_scriptEditor):
 
     def addArgs(self):
         if sys.argv:
-            f = sys.argv[-1]
-            if os.path.exists(f):
-                if not os.path.basename(f) == os.path.basename(__file__):
-                    if os.path.splitext(f)[-1] in ['.txt', '.py']:
-                        self.out.showMessage( os.path.splitext(f)[-1])
-                        self.out.showMessage('Open File: '+f)
-                        text = open(f).read()
-                        self.tab.addNewTab(os.path.basename(f), text)
+            if len(sys.argv) > 1:
+                for f in sys.argv[1:]:
+                    if os.path.exists(f):
+                        if not os.path.basename(f) == os.path.basename(__file__):
+                            if os.path.splitext(f)[-1] in ['.txt', '.py']:
+                                self.out.showMessage( os.path.splitext(f)[-1])
+                                self.out.showMessage('Open File: '+f)
+                                text = open(f).read()
+                                self.tab.addNewTab(os.path.basename(f), text)
 
     def fillThemeMenu(self):
         self.theme_menu.clear()
@@ -206,11 +206,10 @@ class scriptEditorClass(QtWidgets.QMainWindow, ui.Ui_scriptEditor):
         self.s.writeSettings(s)
 
     def setWindowStyle(self):
-        if __name__ == '__main__':
-            qss = os.path.join(os.path.dirname(__file__),'style', 'style.css')
-            if os.path.exists(qss):
-                self.setStyleSheet(open(qss).read())
-                self.setWindowIcon(QtGui.QIcon(icons['pw']))
+        qss = os.path.join(os.path.abspath(os.path.dirname(__file__)),'style', 'style.css')
+        if os.path.exists(qss):
+            self.setStyleSheet(open(qss).read())
+            self.setWindowIcon(QtGui.QIcon(icons['pw']))
 
     def loadSession(self):
         sessions = self.session.readSession()
@@ -221,7 +220,7 @@ class scriptEditorClass(QtWidgets.QMainWindow, ui.Ui_scriptEditor):
                 w= self.tab.addNewTab(s['name'], s['text'])
                 if s['active']:
                     active = i
-                w.setFontSize(s.get('size', None))
+                w.setFontSize(s.get('size', 10))
         else:
             self.tab.addNewTab()
         self.tab.setCurrentIndex(active)

@@ -24,4 +24,5 @@ def show():
     se.runCommand('import MaxPlus')
     se.MaxEventFilter = MaxDialogEvents()
     se.installEventFilter(se.MaxEventFilter)
+    se.setWindowStyle()
     se.show()
