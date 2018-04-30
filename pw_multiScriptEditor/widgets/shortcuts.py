@@ -1,4 +1,4 @@
-from Qt import QtCore, QtWidgets
+from Qt import QtCore, QtWidgets, QtCompat
 
 import shortcuts_UIs
 import os
@@ -7,7 +7,7 @@ class shortcutsClass(QtWidgets.QDialog, shortcuts_UIs.Ui_Dialog):
     def __init__(self, parent):
         super(shortcutsClass, self).__init__(parent)
         self.setupUi(self)
-        self.table.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.Stretch)
+        QtCompat.setSectionResizeMode(self.table.horizontalHeader(), QtWidgets.QHeaderView.Stretch)
         self.table.setColumnCount(2)
         self.table.setHorizontalHeaderLabels(['Action', 'Shortcut'])
         self.read()

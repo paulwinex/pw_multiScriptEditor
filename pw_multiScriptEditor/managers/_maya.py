@@ -7,7 +7,7 @@ except:
 import maya.OpenMayaUI as omui
 
 import os, sys, re
-from managers.completeWidget import contextCompleterClass
+from ..managers.completeWidget import contextCompleterClass
 
 main = __import__('__main__')
 ns = main.__dict__
@@ -22,9 +22,10 @@ sys.path.insert(0, compPath)
 
 def getMayaWindow():
     if _pyside_ver == 1:
+        from shiboken import wrapInstance
         ptr = omui.MQtUtil.mainWindow()
         if ptr is not None:
-            return wrp(long(ptr), QtWidgets.QMainWindow)
+            return wrapInstance(long(ptr), QtWidgets.QMainWindow)
     elif _pyside_ver == 2:
         from pymel.core import ui
         return ui.Window('MayaWindow').asQtObject()
