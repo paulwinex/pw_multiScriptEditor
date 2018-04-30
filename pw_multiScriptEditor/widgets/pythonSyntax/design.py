@@ -1,4 +1,4 @@
-import settingsManager
+from ... import settingsManager
 import os, re
 
 EditorStyle = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'style', 'completer.qss')

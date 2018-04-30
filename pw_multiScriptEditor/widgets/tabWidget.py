@@ -1,17 +1,13 @@
 try:
-    from PySide.QtCore import *
-    from PySide.QtGui import *
+    from Qt import QtCore, QtGui, QtWidgets
     qt = 1
 except:
-    from PySide2.QtCore import *
-    from PySide2.QtGui import *
-    from PySide2.QtWidgets import *
     qt = 2
 import os
 import numBarWidget, inputWidget
 reload(inputWidget)
 reload(numBarWidget)
-from managers import context
+#from managers import context
 
 
 style = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'style', 'completer.qss')
@@ -19,23 +15,23 @@ if not os.path.exists(style):
     style=None
 
 
-class tabWidgetClass(QTabWidget):
+class tabWidgetClass(QtWidgets.QTabWidget):
     def __init__(self, parent=None):
         super(tabWidgetClass, self).__init__(parent)
         # ui
         self.setTabsClosable(True)
         self.setMovable(True)
         self.tabCloseRequested.connect(self.closeTab)
-        self.tabBar().setContextMenuPolicy(Qt.CustomContextMenu)
+        self.tabBar().setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
         self.tabBar().customContextMenuRequested.connect(self.openMenu)
-        newTabButton = QPushButton(self)
+        newTabButton = QtWidgets.QPushButton(self)
         newTabButton.setMaximumWidth(30)
-        self.setCornerWidget(newTabButton, Qt.TopLeftCorner)
-        newTabButton.setCursor(Qt.ArrowCursor)
+        self.setCornerWidget(newTabButton, QtCore.Qt.TopLeftCorner)
+        newTabButton.setCursor(QtCore.Qt.ArrowCursor)
         newTabButton.setText('+')
         newTabButton.clicked.connect(self.addNewTab)
         newTabButton.setToolTip("Add Tab")
-        self.desk = QApplication.desktop()
+        self.desk = QtWidgets.QApplication.desktop()
         # variables
         self.p = parent
         self.lastSearch = [0, None]
@@ -60,14 +56,14 @@ class tabWidgetClass(QTabWidget):
                 self.removeTab(i)
 
     def openMenu(self):
-        menu = QMenu(self)
-        menu.addAction(QAction('Rename Current Tab', self, triggered = self.renameTab))
-        menu.exec_(QCursor.pos())
+        menu = QtWidgets.QMenu(self)
+        menu.addAction(QtWidgets.QAction('Rename Current Tab', self, triggered = self.renameTab))
+        menu.exec_(QtGui.QCursor.pos())
 
     def renameTab(self):
         index = self.currentIndex()
         text = self.tabText(index)
-        result = QInputDialog.getText(self, 'New name', 'Enter New Name', text=text)
+        result = QtWidgets.QInputDialog.getText(self, 'New name', 'Enter New Name', text=text)
         if result[1]:
             self.setTabText(index, result[0])
 
@@ -81,7 +77,7 @@ class tabWidgetClass(QTabWidget):
         cont.edit.saveSignal.connect(self.p.saveSession)
         # cont.edit.executeSignal.connect(self.p.executeSelected)
         self.addTab(cont, name)
-        cont.edit.moveCursor(QTextCursor.Start)
+        cont.edit.moveCursor(QtGui.QTextCursor.Start)
         self.setCurrentIndex(self.count()-1)
         return cont.edit
 
@@ -156,18 +152,18 @@ class tabWidgetClass(QTabWidget):
         self.current().commentSelected()
 
     def yes_no_question(self, question):
-        msg_box = QMessageBox(self)
+        msg_box = QtWidgets.QMessageBox(self)
         msg_box.setText(question)
-        yes_button = msg_box.addButton("Yes", QMessageBox.YesRole)
-        no_button = msg_box.addButton("No", QMessageBox.NoRole)
+        yes_button = msg_box.addButton("Yes", QtWidgets.QMessageBox.YesRole)
+        no_button = msg_box.addButton("No", QtWidgets.QMessageBox.NoRole)
         msg_box.exec_()
         return msg_box.clickedButton() == yes_button
 
 
-class container(QWidget):
+class container(QtWidgets.QWidget):
     def __init__(self, text, parent, desk):
         super(container, self).__init__()
-        hbox = QHBoxLayout(self)
+        hbox = QtWidgets.QHBoxLayout(self)
         hbox.setSpacing(0)
         hbox.setContentsMargins(0,0,0,0)
         # input widget
@@ -191,7 +187,7 @@ class container(QWidget):
 
 
 if __name__ == '__main__':
-    app = QApplication([])
+    app = QtWidgets.QApplication([])
     w = tabWidgetClass()
     w.show()
     app.exec_()

@@ -1,19 +1,14 @@
-try:
-    from PySide.QtCore import *
-    from PySide.QtGui import *
-except:
-    from PySide2.QtCore import *
-    from PySide2.QtGui import *
-    from PySide2.QtWidgets import *
+from Qt import QtCore, QtGui, QtWidgets
+
 import os, re
 from . pythonSyntax import design
-import managers
+from .. import managers
 style = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'style', 'completer.qss')
 if not os.path.exists(style):
     style=None
 
 
-class completeMenuClass(QListWidget):
+class completeMenuClass(QtWidgets.QListWidget):
     def __init__(self, parent=None, editor=None):
         # if managers.context == 'hou':
         #     super(completeMenuClass, self).__init__(managers.main_parent or parent)
@@ -22,11 +17,11 @@ class completeMenuClass(QListWidget):
         self.setAlternatingRowColors(1)
         self.lineHeight = 18
         self.e = editor
-        self.setAttribute(Qt.WA_ShowWithoutActivating)
+        self.setAttribute(QtCore.Qt.WA_ShowWithoutActivating)
         if managers._s == 'w':
-            self.setWindowFlags(Qt.FramelessWindowHint |  Qt.Window)
+            self.setWindowFlags(QtCore.Qt.FramelessWindowHint |  QtCore.Qt.Window)
         else:
-            self.setWindowFlags(Qt.FramelessWindowHint |  Qt.Window | Qt.WindowStaysOnTopHint)
+            self.setWindowFlags(QtCore.Qt.FramelessWindowHint |  QtCore.Qt.Window | QtCore.Qt.WindowStaysOnTopHint)
         @self.itemDoubleClicked.connect
         def insertSelected(item):
             if item:
@@ -44,7 +39,7 @@ class completeMenuClass(QListWidget):
             self.showMe()
             if lines:
                 for i in [x for x in lines if not x.name == 'mro']:
-                    item = QListWidgetItem(i.name)
+                    item = QtWidgets.QListWidgetItem(i.name)
                     item.setData(32, i)
                     self.addItem(item)
             if extra:
@@ -53,13 +48,13 @@ class completeMenuClass(QListWidget):
                 font.setItalic(1)
                 font.setPointSize(font.pointSize()*0.8)
                 for e in extra:
-                    item = QListWidgetItem(e.name)
+                    item = QtWidgets.QListWidgetItem(e.name)
                     item.setData(32, e)
                     item.setFont(font)
                     self.addItem(item)
 
-            font = QFont("monospace", self.lineHeight, False)
-            fm = QFontMetrics (font)
+            font = QtGui.QFont("monospace", self.lineHeight, False)
+            fm = QtGui.QFontMetrics (font)
             width = fm.width(' ') *  max([len(x.name) for x in lines or extra]) + 40
 
             self.resize(max(250,width), 250)
@@ -75,38 +70,38 @@ class completeMenuClass(QListWidget):
         self.hideMe()
 
     def keyPressEvent(self, event):
-        if event.key() == Qt.Key_Escape:
+        if event.key() == QtCore.Qt.Key_Escape:
             self.close()
         # elif event.text():
         #     self.editor().setFocus()
-        elif event.key() == Qt.Key_Return or event.key() == Qt.Key_Enter:
+        elif event.key() == QtCore.Qt.Key_Return or event.key() == QtCore.Qt.Key_Enter:
             self.editor().setFocus()
             self.applyCurrentComplete()
             return event
-        elif event.key() == Qt.Key_Up:
+        elif event.key() == QtCore.Qt.Key_Up:
             sel = self.selectedItems()
             if sel:
                 i = self.row(sel[0])
                 if i == 0:
-                    QListWidget.keyPressEvent(self, event)
+                    QtWidgets.QListWidget.keyPressEvent(self, event)
                     self.setCurrentRow(self.count()-1)
                     return
-        elif event.key() == Qt.Key_Down:
+        elif event.key() == QtCore.Qt.Key_Down:
             sel = self.selectedItems()
             if sel:
                 i = self.row(sel[0])
                 if i+1 == self.count():
-                    QListWidget.keyPressEvent(self, event)
+                    QtWidgets.QListWidget.keyPressEvent(self, event)
                     self.setCurrentRow(0)
                     return
-        elif event.key() == Qt.Key_Backspace:
+        elif event.key() == QtCore.Qt.Key_Backspace:
             self.editor().setFocus()
             self.editor().activateWindow()
         elif event.text():
             self.editor().keyPressEvent(event)
             return
 
-        QListWidget.keyPressEvent(self, event)
+        QtWidgets.QListWidget.keyPressEvent(self, event)
 
     def sendText(self, comp):
         self.editor().insertText(comp)
@@ -116,7 +111,7 @@ class completeMenuClass(QListWidget):
 
     def activateCompleter(self, key=False):
         self.activateWindow()
-        if not key==Qt.Key_Up:
+        if not key==QtCore.Qt.Key_Up:
             self.setCurrentRow(min(1, self.count()-1))
         else:
             self.setCurrentRow(self.count()-1)

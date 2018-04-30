@@ -1,22 +1,18 @@
 try:
-    from PySide.QtCore import *
-    from PySide.QtGui import *
+    from Qt import QtCore, QtGui, QtWidgets
     qt = 1
 except:
-    from PySide2.QtCore import *
-    from PySide2.QtGui import *
-    from PySide2.QtWidgets import *
     qt = 2
 import themeEditor_UIs as ui
-import settingsManager
+from .. import settingsManager
 import os
 from .pythonSyntax import design
 from .pythonSyntax import syntaxHighLighter
 from . import inputWidget
-import icons_rcs
+from .. import icons_rcs
 
 
-class themeEditorClass(QDialog, ui.Ui_themeEditor):
+class themeEditorClass(QtWidgets.QDialog, ui.Ui_themeEditor):
     def __init__(self, parent = None, desk=None):
         super(themeEditorClass, self).__init__(parent)
         self.setupUi(self)
@@ -79,10 +75,10 @@ class themeEditorClass(QDialog, ui.Ui_themeEditor):
             if x == 'textsize':
                 self.textSize_spb.setValue(colors['textsize'])
             else:
-                item = QListWidgetItem(x)
-                pix = QPixmap(QSize(16,16))
-                pix.fill(QColor(*colors[x]))
-                item.setIcon(QIcon(pix))
+                item = QtWidgets.QListWidgetItem(x)
+                pix = QtGui.QPixmap(QtCore.QSize(16,16))
+                pix.fill(QtGui.QColor(*colors[x]))
+                item.setIcon(QtGui.QIcon(pix))
                 item.setData(32, colors[x])
                 self.colors_lwd.addItem(item)
         self.updateExample()
@@ -103,19 +99,19 @@ class themeEditorClass(QDialog, ui.Ui_themeEditor):
         items = self.colors_lwd.selectedItems()
         if items:
             item = items[0]
-            init = QColor(*item.data(32))
-            color = QColorDialog.getColor(init ,self)
+            init = QtGui.QColor(*item.data(32))
+            color = QtWidgets.QColorDialog.getColor(init ,self)
             if color.isValid():
                 newColor = (color.red(), color.green(), color.blue())
                 item.setData(32, newColor)
-                pix = QPixmap(QSize(16,16))
-                pix.fill(QColor(*newColor))
-                item.setIcon(QIcon(pix))
+                pix = QtGui.QPixmap(QtCore.QSize(16,16))
+                pix.fill(QtGui.QColor(*newColor))
+                item.setIcon(QtGui.QIcon(pix))
                 self.updateExample()
 
     def saveTheme(self):
         text = self.themeList_cbb.currentText() or 'NewTheme'
-        name = QInputDialog.getText(self, 'Theme name', 'Enter Theme name', QLineEdit.Normal, text)
+        name = QtWidgets.QInputDialog.getText(self, 'Theme name', 'Enter Theme name', QtWidgets.QLineEdit.Normal, text)
         if name[1]:
             name = name[0]
             if name == 'default':
@@ -163,7 +159,7 @@ class themeEditorClass(QDialog, ui.Ui_themeEditor):
             self.accept()
 
     def keyPressEvent(self, event):
-        if event.key() == Qt.Key_Escape:
+        if event.key() == QtCore.Qt.Key_Escape:
             event.ignore()
         else:
             super(themeEditorClass, self).keyPressEvent(event)
@@ -173,10 +169,10 @@ class themeEditorClass(QDialog, ui.Ui_themeEditor):
         # print self.colors_lwd.selectedItems()[0].data(32)
 
     def yes_no_question(self, question):
-        msg_box = QMessageBox(self)
+        msg_box = QtWidgets.QMessageBox(self)
         msg_box.setText(question)
-        yes_button = msg_box.addButton("Yes", QMessageBox.YesRole)
-        no_button = msg_box.addButton("No", QMessageBox.NoRole)
+        yes_button = msg_box.addButton("Yes", QtWidgets.QMessageBox.YesRole)
+        no_button = msg_box.addButton("No", QtWidgets.QMessageBox.NoRole)
         msg_box.exec_()
         return msg_box.clickedButton() == yes_button
 
@@ -203,7 +199,7 @@ print(f.__doc__)
 
 
 if __name__ == '__main__':
-    app = QApplication([])
+    app = QtWidgets.QApplication([])
     w = themeEditorClass()
     w.show()
     qss = os.path.join(os.path.dirname(os.path.dirname(__file__)),'style', 'style.css')

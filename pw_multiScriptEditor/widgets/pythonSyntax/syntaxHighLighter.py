@@ -1,18 +1,13 @@
-try:
-    from PySide.QtCore import *
-    from PySide.QtGui import *
-except:
-    from PySide2.QtCore import *
-    from PySide2.QtGui import *
-    from PySide2.QtWidgets import *
+from Qt import QtCore, QtGui
+
 import re
 import design
 import keywords
 
 
-class PythonHighlighterClass (QSyntaxHighlighter):
+class PythonHighlighterClass (QtGui.QSyntaxHighlighter):
     def __init__(self, document, colors=None):
-        QSyntaxHighlighter.__init__(self, document)
+        QtGui.QSyntaxHighlighter.__init__(self, document)
 
         if colors:
             self.colors = colors
@@ -20,8 +15,8 @@ class PythonHighlighterClass (QSyntaxHighlighter):
             self.colors = design.getColors()
 
         # Multi line comments
-        self.tri_single = (QRegExp("'''"), 1, self.getStyle(self.colors['docstring']))
-        self.tri_double = (QRegExp('"""'), 2, self.getStyle(self.colors['docstring']))
+        self.tri_single = (QtCore.QRegExp("'''"), 1, self.getStyle(self.colors['docstring']))
+        self.tri_double = (QtCore.QRegExp('"""'), 2, self.getStyle(self.colors['docstring']))
 
         rules = []
         # defaults
@@ -60,15 +55,15 @@ class PythonHighlighterClass (QSyntaxHighlighter):
 
 
         # Build a QRegExp for each pattern
-        self.rules = [(QRegExp(pat), index, fmt) for (pat, index, fmt) in rules]
+        self.rules = [(QtCore.QRegExp(pat), index, fmt) for (pat, index, fmt) in rules]
         # self.rehighlight()
 
 
     def getStyle(self, color, bold=False):
-        brush = QBrush( QColor(*color))
-        f = QTextCharFormat()
+        brush = QtGui.QBrush( QtGui.QColor(*color))
+        f = QtGui.QTextCharFormat()
         if bold:
-            f.setFontWeight( QFont.Bold )
+            f.setFontWeight( QtGui.QFont.Bold )
         f.setForeground( brush )
         return f
 

@@ -1,18 +1,13 @@
 _pyside_ver = 0
 try:
-    from PySide.QtCore import *
-    from PySide.QtGui import *
-    from shiboken import wrapInstance as wrp
+    from Qt import QtCore, QtGui, QtWidgets
     _pyside_ver = 1
 except:
-    from PySide2.QtCore import *
-    from PySide2.QtGui import *
-    from PySide2.QtWidgets import *
     _pyside_ver = 2
 import maya.OpenMayaUI as omui
 
 import os, sys, re
-from managers.completeWidget import contextCompleterClass
+from ..managers.completeWidget import contextCompleterClass
 
 main = __import__('__main__')
 ns = main.__dict__
@@ -27,9 +22,10 @@ sys.path.insert(0, compPath)
 
 def getMayaWindow():
     if _pyside_ver == 1:
+        from shiboken import wrapInstance
         ptr = omui.MQtUtil.mainWindow()
         if ptr is not None:
-            return wrp(long(ptr), QMainWindow)
+            return wrapInstance(long(ptr), QtWidgets.QMainWindow)
     elif _pyside_ver == 2:
         from pymel.core import ui
         return ui.Window('MayaWindow').asQtObject()
@@ -108,7 +104,7 @@ def completer(line, ns):
 # drop event
 
 def wrapDroppedText(namespace, text, event):
-    if event.keyboardModifiers() == Qt.AltModifier:
+    if event.keyboardModifiers() == QtCore.Qt.AltModifier:
         # pymel with namespace
         for k, m in namespace.items():
             if hasattr(m, '__name__'):
@@ -160,13 +156,13 @@ def contextMenu(parent):
     m = mayaMenuClass(parent)
     return m
 
-class mayaMenuClass(QMenu):
+class mayaMenuClass(QtWidgets.QMenu):
     def __init__(self, parent):
         super(mayaMenuClass, self).__init__('Maya', parent)
         self.par = parent
         self.setTearOffEnabled(1)
         self.setWindowTitle('MSE %s Maya' % self.par.ver)
-        a = QAction('Save to shelf', parent, triggered=self.saveToShelfDialog)
+        a = QtWidgets.QAction('Save to shelf', parent, triggered=self.saveToShelfDialog)
         self.addAction(a)
 
     def saveToShelfDialog(self):
@@ -175,15 +171,15 @@ class mayaMenuClass(QMenu):
         self.dial.show()
 
 
-class mayaIconsClass(QListWidget):
+class mayaIconsClass(QtWidgets.QListWidget):
     def __init__(self, parent):
         super(mayaIconsClass, self).__init__()
         self.par = parent
-        self.setWindowFlags(Qt.Tool)
-        self.setViewMode(QListView.IconMode)
-        self.setIconSize(QSize(32,32))
-        self.setEditTriggers(QAbstractItemView.NoEditTriggers)
-        self.setResizeMode(QListWidget.ResizeMode.Adjust)
+        self.setWindowFlags(QtCore.Qt.Tool)
+        self.setViewMode(QtWidgets.QListView.IconMode)
+        self.setIconSize(QtCore.QSize(32,32))
+        self.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
+        self.setResizeMode(QtWidgets.QListWidget.ResizeMode.Adjust)
         self.fillIcons()
         self.itemClicked.connect(self.print_name)
 
@@ -191,14 +187,14 @@ class mayaIconsClass(QListWidget):
         res, files = self.getIcons()
         self.par.out.showMessage( "%s icons found" % len(res+files))
         for ico in sorted(res):
-            item = QListWidgetItem(self)
-            item.setIcon(QIcon(':/'+ico))
+            item = QtWidgets.QListWidgetItem(self)
+            item.setIcon(QtGui.QIcon(':/'+ico))
             item.setData(32, ':/'+ico)
             item.setToolTip(ico)
             self.addItem(item)
         for f in sorted(files, key=lambda x: os.path.splitext(x)[0]):
-            item = QListWidgetItem(self)
-            item.setIcon(QIcon(f))
+            item = QtWidgets.QListWidgetItem(self)
+            item.setIcon(QtGui.QIcon(f))
             item.setData(32, f)
             item.setToolTip(f)
             self.addItem(item)
@@ -225,23 +221,23 @@ class mayaIconsClass(QListWidget):
     def print_name(self, item):
         print item.data(32)
 
-class saveToShelfClass(QDialog):
+class saveToShelfClass(QtWidgets.QDialog):
     def __init__(self, parent):
         super(saveToShelfClass, self).__init__(parent)
         self.par = parent
-        self.setWindowFlags(Qt.Tool)
+        self.setWindowFlags(QtCore.Qt.Tool)
         self.setObjectName('maya_create_shelfButton')
         self.setWindowTitle('Save script to shelf')
-        self.verticalLayout = QVBoxLayout(self)
-        self.gridLayout = QGridLayout()
-        self.label = QLabel('Label')
+        self.verticalLayout = QtWidgets.QVBoxLayout(self)
+        self.gridLayout = QtWidgets.QGridLayout()
+        self.label = QtWidgets.QLabel('Label')
         self.gridLayout.addWidget(self.label, 0, 0, 1, 1)
-        self.lineEdit = QLineEdit(self)
+        self.lineEdit = QtWidgets.QLineEdit(self)
         self.gridLayout.addWidget(self.lineEdit, 0, 1, 1, 1)
         self.verticalLayout.addLayout(self.gridLayout)
         self.listWidget = mayaIconsClass(parent)
         self.verticalLayout.addWidget(self.listWidget)
-        self.pushButton = QPushButton('Save to shelf')
+        self.pushButton = QtWidgets.QPushButton('Save to shelf')
         self.verticalLayout.addWidget(self.pushButton)
 
         self.pushButton.clicked.connect(self.createButton)

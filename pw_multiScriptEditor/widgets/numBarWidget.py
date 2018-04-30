@@ -1,15 +1,9 @@
-try:
-    from PySide.QtCore import *
-    from PySide.QtGui import *
-except:
-    from PySide2.QtCore import *
-    from PySide2.QtGui import *
-    from PySide2.QtWidgets import *
-import managers
+from Qt import QtCore, QtGui, QtWidgets
+from .. import managers
 
-class lineNumberBarClass(QWidget):
+class lineNumberBarClass(QtWidgets.QWidget):
     def __init__(self, edit, parent=None):
-        QWidget.__init__(self, parent)
+        QtWidgets.QWidget.__init__(self, parent)
         self.edit = edit
         self.highest_line = 0
         self.setMinimumWidth(30)
@@ -30,27 +24,27 @@ class lineNumberBarClass(QWidget):
         width = ((self.fontMetrics().width(str(self.highest_line)) + 7))*(fontSize/13.0)
         if self.width() != width and width > 10:
             self.setFixedWidth(width)
-        bg = self.palette().brush(QPalette.Normal,QPalette.Window).color().toHsv()
+        bg = self.palette().brush(QtGui.QPalette.Normal,QtGui.QPalette.Window).color().toHsv()
         v = bg.value()
         if v > 20:
             v = int(bg.value()*0.8)
         else:
             v = int(bg.value()*1.1)
-        self.bg = QColor.fromHsv(bg.hue(), bg.saturation(), v)
-        QWidget.update(self, *args)
+        self.bg = QtGui.QColor.fromHsv(bg.hue(), bg.saturation(), v)
+        QtWidgets.QWidget.update(self, *args)
 
     def paintEvent(self, event):
         contents_y = self.edit.verticalScrollBar().value()
         page_bottom = contents_y + self.edit.viewport().height()
         font_metrics = self.fontMetrics()
         current_block = self.edit.document().findBlock(self.edit.textCursor().position())
-        painter = QPainter(self)
+        painter = QtGui.QPainter(self)
         line_count = 0
         # Iterate over all text blocks in the document.
         block = self.edit.document().begin()
         if managers.context == 'hou':
             fontSize = self.edit.fs
-            font = QFont('monospace', fontSize*0.7)
+            font = QtGui.QFont('monospace', fontSize*0.7)
             offset = (font_metrics.ascent() + font_metrics.descent())/2
         else:
             fontSize = self.edit.font().pointSize()
@@ -59,7 +53,7 @@ class lineNumberBarClass(QWidget):
             offset = font_metrics.ascent() + font_metrics.descent()
         color = painter.pen().color()
         painter.setFont(font)
-        align = Qt.AlignRight
+        align = QtCore.Qt.AlignRight
         while block.isValid():
             line_count += 1
             # The top left position of the block in the document
@@ -69,21 +63,21 @@ class lineNumberBarClass(QWidget):
             if position.y() == page_bottom:
                 break
 
-            rec = QRect(0,
+            rec = QtCore.QRect(0,
                         round(position.y()) - contents_y,
                         self.width()-5,
                         fontSize + offset)
 
             # draw line rect
             if block == current_block:
-                painter.setPen(Qt.NoPen)
-                painter.setBrush(QBrush(self.bg))
-                painter.drawRect(QRect(0,
+                painter.setPen(QtCore.Qt.NoPen)
+                painter.setBrush(QtGui.QBrush(self.bg))
+                painter.drawRect(QtCore.QRect(0,
                         round(position.y()) - contents_y,
                         self.width(),
                         fontSize + (offset/2) ))
             #   #restore color
-                painter.setPen(QPen(color))
+                painter.setPen(QtGui.QPen(color))
 
             # draw text
             painter.drawText(rec, align, str(line_count))
@@ -92,7 +86,7 @@ class lineNumberBarClass(QWidget):
             block = block.next()
         self.highest_line = line_count
         painter.end()
-        QWidget.paintEvent(self, event)
+        QtWidgets.QWidget.paintEvent(self, event)
 
     def eventFilter(self, object, event):
         # Update the line numbers for all events on the text edit and the viewport.
@@ -100,4 +94,4 @@ class lineNumberBarClass(QWidget):
         if object in (self.edit, self.edit.viewport()):
             self.update()
             return False
-        return QWidget.eventFilter(object, event)
+        return QtWidgets.QWidget.eventFilter(object, event)

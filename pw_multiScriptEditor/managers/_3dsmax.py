@@ -1,12 +1,12 @@
 import os, sys, re
 
-from PySide import QtGui
-from PySide import QtCore
+from Qt import QtCore, QtWidgets
 
 from pw_multiScriptEditor import scriptEditor
+
 reload(scriptEditor)
 import MaxPlus
-q3dsmax = QtGui.QApplication.instance()
+q3dsmax = QtWidgets.QApplication.instance()
 
 class MaxDialogEvents(QtCore.QObject):
     def eventFilter(self, obj, event):
@@ -24,4 +24,5 @@ def show():
     se.runCommand('import MaxPlus')
     se.MaxEventFilter = MaxDialogEvents()
     se.installEventFilter(se.MaxEventFilter)
+    se.setWindowStyle()
     se.show()

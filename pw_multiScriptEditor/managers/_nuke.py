@@ -6,12 +6,11 @@ exec 'import nuke' in ns
 exec 'import nukescripts' in ns
 nuke = ns['nuke']
 import nukescripts
-from managers.nuke import nodes
+from ..managers.nuke import nodes
 nuke_nodes = dir(nodes)
-from managers.completeWidget import contextCompleterClass
+from ..managers.completeWidget import contextCompleterClass
 
-from PySide.QtGui import *
-from PySide.QtCore import *
+from Qt import QtCore, QtWidgets
 
 p = os.path.dirname(__file__).replace('\\','/')
 if not p in sys.path:
@@ -21,7 +20,7 @@ from pw_multiScriptEditor import scriptEditor
 reload(scriptEditor)
 
 # QT
-qApp = QApplication.instance()
+qApp = QtWidgets.QApplication.instance()
 
 def getMainWindow():
     for widget in qApp.topLevelWidgets():
@@ -126,17 +125,17 @@ def contextMenu(parent):
     m = nukeContextMenu(parent)
     return m
 
-class nukeContextMenu(QMenu):
+class nukeContextMenu(QtWidgets.QMenu):
     def __init__(self, parent):
         super(nukeContextMenu, self).__init__('Nuke')
         self.par = parent
         self.setTearOffEnabled(1)
         self.setWindowTitle('MSE %s Nuke' % self.par.ver)
-        self.addAction(QAction('Read PyScript Knob', parent, triggered=self.readPyScriptKnob))
-        self.addAction(QAction('Save To PyScript Knob', parent, triggered=self.saveToKnob))
+        self.addAction(QtWidgets.QAction('Read PyScript Knob', parent, triggered=self.readPyScriptKnob))
+        self.addAction(QtWidgets.QAction('Save To PyScript Knob', parent, triggered=self.saveToKnob))
         self.addSeparator()
-        self.addAction(QAction('From Selected', parent, triggered=self.nodeToCode))
-        self.addAction(QAction('From Clipboard', parent, triggered=self.nodesFromClipboard))
+        self.addAction(QtWidgets.QAction('From Selected', parent, triggered=self.nodeToCode))
+        self.addAction(QtWidgets.QAction('From Clipboard', parent, triggered=self.nodesFromClipboard))
 
     def nodeToCode(self):
         nodes = nuke.selectedNodes()
@@ -180,7 +179,7 @@ class nukeContextMenu(QMenu):
 
     def nodesFromClipboard(self):
         # nuke.tprint(str(self.par))
-        text = QApplication.clipboard().text()
+        text = QtWidgets.QApplication.clipboard().text()
         nodes = []
         if text:
             for l in text.split('\n'):
@@ -191,22 +190,22 @@ class nukeContextMenu(QMenu):
         for n in nodes:
             self.par.tab.addToCurrent('nuke.toNode("%s")\n' % n)
 
-class selectDialog(QDialog):
+class selectDialog(QtWidgets.QDialog):
     def __init__(self, items, title, sel=None):
         super(selectDialog, self).__init__()
         self.setWindowTitle(title)
-        self.setWindowFlags(Qt.Tool)
-        self.list = QListWidget(self)
-        self.list.setSelectionMode(QAbstractItemView.SingleSelection)
-        self.ly = QVBoxLayout(self)
+        self.setWindowFlags(QtCore.Qt.Tool)
+        self.list = QtWidgets.QListWidget(self)
+        self.list.setSelectionMode(QtWidgets.QAbstractItemView.SingleSelection)
+        self.ly = QtWidgets.QVBoxLayout(self)
         self.setLayout(self.ly)
         self.ly.addWidget(self.list)
-        self.btn = QPushButton('Select')
+        self.btn = QtWidgets.QPushButton('Select')
         self.ly.addWidget(self.btn)
         self.btn.clicked.connect(self.accept)
         selected = None
         for i in items:
-            item = QListWidgetItem(i)
+            item = QtWidgets.QListWidgetItem(i)
             item.setData(32, i)
             self.list.addItem(item)
             if i == sel:

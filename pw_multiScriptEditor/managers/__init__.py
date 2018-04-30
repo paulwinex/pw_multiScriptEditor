@@ -6,40 +6,40 @@ import platform
 
 # NUKE
 def nukeCompleter(*args):
-    from managers import _nuke
+    import _nuke
     return _nuke.completer(*args)
 
 def getNukeContextMenu(*args):
-    from managers import _nuke
+    import _nuke
     reload(_nuke)
     return _nuke.contextMenu(*args)
 ###################################################################
 
 # HOUDINI
 def houdiniCompleter(*args):
-    from managers import _houdini
+    import _houdini
     return _houdini.completer(*args)
 def getHoudiniContextMenu(*args):
-    from managers import _houdini
+    import _houdini
     reload(_houdini)
     return _houdini.contextMenu(*args)
 def houdiniDropEvent(*args):
-    from managers import _houdini
+    import _houdini
     reload(_houdini)
     return _houdini.wrapDroppedText(*args)
 ###################################################################
 
 # MAYA
 def mayaCompleter(*args):
-    from managers import _maya
+    import _maya
     reload(_maya)
     return _maya.completer(*args)
 
 def mayaDropEvent(*args):
-    from managers import _maya
+    import _maya
     return _maya.wrapDroppedText(*args)
 def getMayaContextMenu(*args):
-    from managers import _maya
+    import _maya
     reload(_maya)
     return _maya.contextMenu(*args)
 ###################################################################

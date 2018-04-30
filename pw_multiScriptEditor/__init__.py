@@ -1,10 +1,5 @@
 import os, sys
 
-root = os.path.dirname(__file__)
-if not root in sys.path:
-    sys.path.append(root)
-
-
 # HOUDINI
 def showHoudini(clear=False, ontop=False, name=None, floating=False, position=(), size=(),
                 pane=None, replacePyPanel=False, hideTitleMenu=True):
@@ -26,12 +21,12 @@ def showNuke(panel=False):
 # MAYA
 def showMaya(dock=False):
     from .managers import _maya
-    reload (_maya)
+    reload(_maya)
     _maya.show(dock)
 
 # 3DSMAX PLUS
 def show3DSMax():
     sys.argv = []
     from .managers import _3dsmax
-    reload (_3dsmax)
+    reload(_3dsmax)
     _3dsmax.show()
