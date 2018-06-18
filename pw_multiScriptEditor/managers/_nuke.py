@@ -1,33 +1,31 @@
 import os, sys, re
-# import nuke
-main = __import__('__main__')
-ns = main.__dict__
-exec 'import nuke' in ns
-exec 'import nukescripts' in ns
-nuke = ns['nuke']
+import nuke
 import nukescripts
 from managers.nuke import nodes
 nuke_nodes = dir(nodes)
 from managers.completeWidget import contextCompleterClass
 
-from PySide.QtGui import *
-from PySide.QtCore import *
+try:
+    from Qt.QtWidgets import *
+    from Qt.QtCore import *
+    from Qt.QtWidgets import *
+except:
+    from PySide.QtGui import *
+    from PySide.QtCore import *
 
-p = os.path.dirname(__file__).replace('\\','/')
+p = os.path.dirname(__file__).replace('\\', '/')
 if not p in sys.path:
     sys.path.insert(0, p)
 
 from pw_multiScriptEditor import scriptEditor
 reload(scriptEditor)
 
-# QT
-qApp = QApplication.instance()
-
 def getMainWindow():
+    qApp = QApplication.instance()
     for widget in qApp.topLevelWidgets():
         if widget.metaObject().className() == 'Foundry::UI::DockMainWindow':
             return widget
-qNuke = getMainWindow()
+
 
 def show(panel=False):
     if panel:
@@ -38,6 +36,7 @@ def show(panel=False):
 
 
 def showWindow():
+    qNuke = getMainWindow()
     se = scriptEditor.scriptEditorClass(qNuke)
     se.runCommand('import nuke')
     se.show()
@@ -219,4 +218,3 @@ class selectDialog(QDialog):
     def closeEvent(self, *args, **kwargs):
         self.reject()
         super(selectDialog, self).closeEvent( *args, **kwargs)
-

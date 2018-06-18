@@ -1,16 +1,19 @@
 try:
+    from Qt.QtCore import *
+    from Qt.QtGui import *
+    from Qt.QtWidgets import *
+
+except:
     from PySide.QtCore import *
     from PySide.QtGui import *
-except:
-    from PySide2.QtCore import *
-    from PySide2.QtGui import *
-    from PySide2.QtWidgets import *
+
 import os, re
-from . pythonSyntax import design
+from .pythonSyntax import design
 import managers
-style = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'style', 'completer.qss')
+style = os.path.join(
+    os.path.dirname(os.path.dirname(__file__)), 'style', 'completer.qss')
 if not os.path.exists(style):
-    style=None
+    style = None
 
 
 class completeMenuClass(QListWidget):

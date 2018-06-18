@@ -50,12 +50,14 @@ class lineNumberBarClass(QWidget):
         block = self.edit.document().begin()
         if managers.context == 'hou':
             fontSize = self.edit.fs
+
             font = QFont('monospace', fontSize*0.7)
             offset = (font_metrics.ascent() + font_metrics.descent())/2
         else:
             fontSize = self.edit.font().pointSize()
             font = painter.font()
             font.setPixelSize(fontSize)
+
             offset = font_metrics.ascent() + font_metrics.descent()
         color = painter.pen().color()
         painter.setFont(font)
@@ -82,7 +84,7 @@ class lineNumberBarClass(QWidget):
                         round(position.y()) - contents_y,
                         self.width(),
                         fontSize + (offset/2) ))
-            #   #restore color
+                #   #restore color
                 painter.setPen(QPen(color))
 
             # draw text

@@ -1,19 +1,23 @@
 try:
+    from Qt.QtCore import *
+    from Qt.QtGui import *
+    from Qt.QtWidgets import *
+
+except:
     from PySide.QtCore import *
     from PySide.QtGui import *
-except:
-    from PySide2.QtCore import *
-    from PySide2.QtGui import *
-    from PySide2.QtWidgets import *
+
 import icons
 import about_UIs
 import os
 
+
 class aboutClass(QDialog, about_UIs.Ui_Dialog):
+
     def __init__(self, parent):
         super(aboutClass, self).__init__(parent)
         self.setupUi(self)
-        self.title_lb.setText(self.title_lb.text()+str(parent.ver))
+        self.title_lb.setText(self.title_lb.text() + str(parent.ver))
         self.text_link_lb.setText(text)
         self.icon_lb.setPixmap(QPixmap(icons.icons['pw']).scaled(60,60, Qt.KeepAspectRatio, Qt.SmoothTransformation))
         self.donate_btn.setMinimumHeight(35)
